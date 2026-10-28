@@ -1,4 +1,5 @@
 User-agent: *
 Allow: /
+Disallow: /admin.html
 
-Sitemap: /sitemap.xml
+Sitemap: https://mikha555u.github.io/lizart/sitemap.xml
