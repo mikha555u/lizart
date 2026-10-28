@@ -1,4 +1,4 @@
-﻿/**
+/**
  * LIZART SHOP — Dynamic Catalog Loader
  * Loads data/paintings.json and renders/updates catalog cards dynamically.
  * Fallback: preserves hardcoded HTML cards if JSON is unreachable.
@@ -54,9 +54,42 @@
     );
   }
 
+  function updateProductSchema(paintings) {
+    if (!Array.isArray(paintings)) return;
+    var el = document.getElementById('schema-products');
+    if (!el) {
+      el = document.createElement('script');
+      el.id = 'schema-products';
+      el.type = 'application/ld+json';
+      document.head.appendChild(el);
+    }
+    var baseUrl = window.location.origin + window.location.pathname.replace(/[^\/]*$/, '');
+    var schema = {
+      '@context': 'https://schema.org',
+      '@graph': paintings.map(function (p) {
+        return {
+          '@type': 'Product',
+          'name': p.title,
+          'image': p.image ? (baseUrl + p.image) : undefined,
+          'description': p.descr || p.title,
+          'offers': {
+            '@type': 'Offer',
+            'price': String(p.price),
+            'priceCurrency': 'RUB',
+            'availability': p.sold ? 'https://schema.org/PreOrder' : 'https://schema.org/InStock',
+            'url': baseUrl + '#catalog'
+          }
+        };
+      })
+    };
+    el.textContent = JSON.stringify(schema);
+  }
+
   function updateCatalog(paintings) {
     var container = document.querySelector(CATALOG_CONTAINER_SEL);
     if (!container || !Array.isArray(paintings) || paintings.length === 0) return;
+
+    updateProductSchema(paintings);
 
     var existingCards = container.querySelectorAll('.js-product');
     var existingIds = Array.from(existingCards).map(function (c) {
