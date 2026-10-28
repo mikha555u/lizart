@@ -14,6 +14,16 @@
     return String(num).replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
   }
 
+  function escapeHtml(str) {
+    if (!str) return '';
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  }
+
   function renderCard(item) {
     var priceFormatted = formatPrice(item.price);
     var hoverImg = item.image_hover || item.image;
@@ -21,23 +31,23 @@
     var directTgUrl = 'https://t.me/lizartme?direct';
 
     return (
-      '<div class="t776__col t-col t-col_4 t-align_left t-item js-product" data-product-lid="' + item.id + '">' +
+      '<div class="t776__col t-col t-col_4 t-align_left t-item js-product" data-product-lid="' + escapeHtml(item.id) + '">' +
         '<div class="t776__content">' +
           '<a class="js-product-link" href="' + directTgUrl + '" target="_blank" rel="noopener noreferrer">' +
             '<div class="t776__imgwrapper t1002__picture-wrapper" style="padding-bottom:100%;">' +
               '<div class="t776__bgimg t776__bgimg_first_hover t-bgimg js-product-img" ' +
-                'data-original="' + item.image + '" ' +
-                'style="background-image:url(\'' + item.image + '\');"></div>' +
+                'data-original="' + escapeHtml(item.image) + '" ' +
+                'style="background-image:url(\'' + escapeHtml(item.image) + '\');"></div>' +
               '<div class="t776__bgimg t776__bgimg_second t-bgimg" ' +
-                'data-original="' + hoverImg + '" ' +
-                'style="background-image:url(\'' + hoverImg + '\');"></div>' +
+                'data-original="' + escapeHtml(hoverImg) + '" ' +
+                'style="background-image:url(\'' + escapeHtml(hoverImg) + '\');"></div>' +
             '</div>' +
             '<div class="t776__textwrapper">' +
-              '<div class="t776__title t-name t-name_md js-product-name">' + item.title + '</div>' +
-              '<div class="t776__descr t-descr t-descr_xxs">' + (item.descr || '') + '</div>' +
+              '<div class="t776__title t-name t-name_md js-product-name">' + escapeHtml(item.title) + '</div>' +
+              '<div class="t776__descr t-descr t-descr_xxs">' + escapeHtml(item.descr || '') + '</div>' +
               '<div class="t776__price-wrapper">' +
                 '<div class="t776__price t776__price-item t-name t-name_xs">' +
-                  '<div class="t776__price-value js-product-price notranslate" translate="off">' + item.price + '</div>' +
+                  '<div class="t776__price-value js-product-price notranslate" translate="off">' + escapeHtml(String(item.price)) + '</div>' +
                   '<div class="t776__price-currency">р.</div>' +
                 '</div>' +
               '</div>' +

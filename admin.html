@@ -774,6 +774,16 @@
       }
 
       // 4. Render Grid
+      function escapeHtml(str) {
+        if (!str) return '';
+        return String(str)
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#039;');
+      }
+
       function renderGrid() {
         var query = searchInput.value.toLowerCase().trim();
         var filtered = paintings.filter(function (p) {
@@ -800,20 +810,20 @@
           var priceFmt = String(p.price).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + ' ₽';
 
           return (
-            '<div class="painting-card" data-id="' + p.id + '">' +
+            '<div class="painting-card" data-id="' + escapeHtml(p.id) + '">' +
               '<div class="painting-card__img-box">' +
                 '<span class="painting-card__badge ' + badgeClass + '" title="Нажмите, чтобы переключить статус">' + badgeText + '</span>' +
-                '<img src="' + p.image + '" class="painting-card__img" alt="' + p.title + '" loading="lazy">' +
+                '<img src="' + escapeHtml(p.image) + '" class="painting-card__img" alt="' + escapeHtml(p.title) + '" loading="lazy">' +
               '</div>' +
               '<div class="painting-card__body">' +
-                '<h4 class="painting-card__title">' + p.title + '</h4>' +
-                '<p class="painting-card__descr">' + (p.descr || '') + '</p>' +
+                '<h4 class="painting-card__title">' + escapeHtml(p.title) + '</h4>' +
+                '<p class="painting-card__descr">' + escapeHtml(p.descr || '') + '</p>' +
                 '<div class="painting-card__price-row">' +
                   '<span class="painting-card__price">' + priceFmt + '</span>' +
                 '</div>' +
                 '<div class="painting-card__actions">' +
-                  '<button class="btn btn-secondary btn-sm btn-edit" data-id="' + p.id + '">✏️ Изменить</button>' +
-                  '<button class="btn btn-danger btn-sm btn-delete" data-id="' + p.id + '">🗑️ Удалить</button>' +
+                  '<button class="btn btn-secondary btn-sm btn-edit" data-id="' + escapeHtml(p.id) + '">✏️ Изменить</button>' +
+                  '<button class="btn btn-danger btn-sm btn-delete" data-id="' + escapeHtml(p.id) + '">🗑️ Удалить</button>' +
                 '</div>' +
               '</div>' +
             '</div>'
